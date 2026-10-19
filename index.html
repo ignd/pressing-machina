@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Facturation – Pressing by Machina</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bleu:#1f5fe8; --bleu-fonce:#0b2a6b; --bleu-clair:#e8f0ff; --bleu-pale:#f4f8ff;
+    --texte:#14203d; --gris:#6b7794; --bord:#dbe5f7; --vert:#16a34a; --rouge:#dc2626; --jaune:#f5b800;
+    --ombre:0 10px 30px rgba(31,95,232,.12);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Poppins',system-ui,sans-serif;color:var(--texte);background:linear-gradient(160deg,#dfeaff 0%,#f4f8ff 45%,#e6f0ff 100%);min-height:100vh}
+  /* bulles décoratives */
+  .bulles{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+  .bulles i{position:absolute;border-radius:50%;background:radial-gradient(circle at 30% 30%,rgba(255,255,255,.9),rgba(120,170,255,.25));border:1px solid rgba(255,255,255,.7);animation:monte linear infinite}
+  @keyframes monte{from{transform:translateY(110vh)}to{transform:translateY(-20vh)}}
+
+  header.top{position:relative;z-index:1;background:linear-gradient(135deg,var(--bleu-fonce),var(--bleu));color:#fff;padding:18px 28px;display:flex;align-items:center;gap:16px;flex-wrap:wrap;box-shadow:0 6px 24px rgba(11,42,107,.3)}
+  header.top img{width:56px;height:56px;border-radius:14px;object-fit:cover;border:2px solid rgba(255,255,255,.6)}
+  header.top h1{font-size:1.25rem;font-weight:700;line-height:1.2}
+  header.top p{font-size:.8rem;opacity:.85}
+  .nav{margin-left:auto;display:flex;gap:8px}
+  .nav button{background:rgba(255,255,255,.14);color:#fff;border:1px solid rgba(255,255,255,.35);padding:9px 16px;border-radius:999px;font:600 .82rem 'Poppins';cursor:pointer;transition:.2s}
+  .nav button:hover,.nav button.actif{background:#fff;color:var(--bleu-fonce)}
+
+  main{position:relative;z-index:1;max-width:1320px;margin:24px auto;padding:0 20px;display:grid;grid-template-columns:minmax(360px,470px) 1fr;gap:24px;align-items:start}
+  @media(max-width:980px){main{grid-template-columns:1fr}}
+
+  .carte{background:#fff;border-radius:20px;box-shadow:var(--ombre);padding:22px;border:1px solid var(--bord)}
+  .carte h2{font-size:.95rem;font-weight:700;color:var(--bleu-fonce);margin-bottom:14px;display:flex;align-items:center;gap:8px}
+  .carte h2 span.n{background:var(--bleu);color:#fff;width:24px;height:24px;border-radius:50%;display:grid;place-items:center;font-size:.75rem}
+  .carte + .carte{margin-top:18px}
+  label{font-size:.72rem;font-weight:600;color:var(--gris);display:block;margin:10px 0 4px;text-transform:uppercase;letter-spacing:.04em}
+  input,select{width:100%;padding:11px 13px;border:1.5px solid var(--bord);border-radius:12px;font:500 .9rem 'Poppins';color:var(--texte);background:var(--bleu-pale);outline:none;transition:.15s}
+  input:focus,select:focus{border-color:var(--bleu);background:#fff;box-shadow:0 0 0 4px rgba(31,95,232,.12)}
+  .duo{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+
+  /* catalogue */
+  .catalogue{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px}
+  .svc{border:1.5px solid var(--bord);background:var(--bleu-pale);border-radius:14px;padding:10px;text-align:left;cursor:pointer;font-family:inherit;transition:.15s}
+  .svc:hover{border-color:var(--bleu);transform:translateY(-2px);background:#fff;box-shadow:0 6px 16px rgba(31,95,232,.15)}
+  .svc b{display:block;font-size:.8rem;color:var(--texte)}
+  .svc small{color:var(--bleu);font-weight:700;font-size:.78rem}
+  .svc .em{font-size:1.2rem}
+
+  /* lignes */
+  .ligne{display:grid;grid-template-columns:1fr 64px 92px 30px;gap:6px;align-items:center;margin-top:8px}
+  .ligne input{padding:9px 10px;font-size:.82rem}
+  .ligne .x{background:#fee2e2;color:var(--rouge);border:none;border-radius:8px;height:34px;cursor:pointer;font-weight:700}
+  .vide{text-align:center;color:var(--gris);font-size:.82rem;padding:14px;border:2px dashed var(--bord);border-radius:14px;margin-top:10px}
+  .lien{background:none;border:none;color:var(--bleu);font:600 .8rem 'Poppins';cursor:pointer;margin-top:10px}
+
+  .actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:6px}
+  .btn{border:none;border-radius:14px;padding:13px;font:700 .88rem 'Poppins';cursor:pointer;transition:.2s;display:flex;align-items:center;justify-content:center;gap:6px}
+  .btn.prim{background:linear-gradient(135deg,var(--bleu),#3a82ff);color:#fff;box-shadow:0 8px 20px rgba(31,95,232,.35)}
+  .btn.wa{background:#25d366;color:#fff}
+  .btn.sec{background:var(--bleu-clair);color:var(--bleu-fonce)}
+  .btn.plein{grid-column:1/-1}
+  .btn:hover{transform:translateY(-2px);filter:brightness(1.06)}
+
+  /* ===== FACTURE ===== */
+  .zone-facture{position:sticky;top:16px}
+  .facture{background:#fff;border-radius:22px;box-shadow:0 20px 50px rgba(11,42,107,.18);overflow:hidden;border:1px solid var(--bord);position:relative}
+  .f-haut{background:linear-gradient(135deg,var(--bleu-fonce),var(--bleu));color:#fff;padding:28px 34px;position:relative;overflow:hidden}
+  .f-haut::after{content:"";position:absolute;right:-60px;top:-60px;width:220px;height:220px;border-radius:50%;background:rgba(255,255,255,.08)}
+  .f-haut::before{content:"";position:absolute;right:60px;bottom:-70px;width:140px;height:140px;border-radius:50%;background:rgba(255,255,255,.06)}
+  .f-marque{display:flex;align-items:center;gap:14px;position:relative;z-index:1}
+  .f-marque img{width:64px;height:64px;border-radius:16px;object-fit:cover;border:2px solid rgba(255,255,255,.7)}
+  .f-marque h3{font-size:1.4rem;font-weight:800;line-height:1.1}
+  .f-marque p{font-size:.72rem;letter-spacing:.2em;opacity:.85;margin-top:3px}
+  .f-haut{display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap}
+  .f-titre{position:relative;z-index:1;text-align:right;margin-left:auto}
+  .f-titre h4{font-size:1.9rem;font-weight:800;letter-spacing:.08em}
+  .f-titre span{font-size:.85rem;opacity:.9;font-weight:600}
+  .f-corps{padding:28px 34px}
+  .f-infos{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:24px}
+  .f-bloc small{display:block;font-size:.68rem;font-weight:700;color:var(--bleu);letter-spacing:.1em;text-transform:uppercase;margin-bottom:4px}
+  .f-bloc p{font-size:.88rem;line-height:1.5}
+  .f-bloc p b{font-weight:700}
+  table{width:100%;border-collapse:collapse;font-size:.86rem}
+  thead th{background:var(--bleu-clair);color:var(--bleu-fonce);text-align:left;padding:11px 12px;font-size:.7rem;text-transform:uppercase;letter-spacing:.06em}
+  thead th:first-child{border-radius:10px 0 0 10px}
+  thead th:last-child{border-radius:0 10px 10px 0}
+  th.r,td.r{text-align:right}
+  tbody td{padding:12px;border-bottom:1px solid #edf2fb}
+  tbody tr:last-child td{border-bottom:none}
+  .vide-f td{text-align:center;color:var(--gris);padding:30px}
+  .f-bas{display:grid;grid-template-columns:1fr 280px;gap:24px;margin-top:20px;align-items:start}
+  @media(max-width:620px){.f-bas,.f-infos{grid-template-columns:1fr}}
+  .totaux{background:var(--bleu-pale);border-radius:16px;padding:16px 18px}
+  .totaux div{display:flex;justify-content:space-between;font-size:.86rem;padding:4px 0}
+  .totaux .remise{color:var(--vert)}
+  .totaux .total{border-top:2px solid var(--bord);margin-top:8px;padding-top:12px;font-weight:800;font-size:1.15rem;color:var(--bleu-fonce)}
+  .totaux .reste{color:var(--rouge);font-weight:700}
+  .statut{display:inline-block;padding:6px 14px;border-radius:999px;font-size:.74rem;font-weight:700;letter-spacing:.06em}
+  .statut.payee{background:#dcfce7;color:#15803d}
+  .statut.attente{background:#fef3c7;color:#b45309}
+  .statut.partiel{background:#dbeafe;color:#1d4ed8}
+  .note{font-size:.78rem;color:var(--gris);margin-top:10px;line-height:1.5}
+  .f-pied{background:var(--bleu-pale);border-top:1px solid var(--bord);padding:18px 34px;text-align:center;font-size:.78rem;color:var(--gris)}
+  .f-pied b{color:var(--bleu-fonce)}
+  .f-pied .merci{font-size:1rem;font-weight:700;color:var(--bleu);margin-bottom:4px}
+  .tampon{position:absolute;right:50px;bottom:120px;border:4px solid var(--vert);color:var(--vert);font-weight:800;font-size:1.8rem;padding:4px 18px;border-radius:12px;transform:rotate(-14deg);opacity:.75;letter-spacing:.1em;display:none}
+  .facture.payee .tampon{display:block}
+
+  /* historique */
+  #vue-histo{display:none;grid-column:1/-1}
+  .histo-ligne{display:grid;grid-template-columns:130px 1fr 120px 110px 150px;gap:10px;align-items:center;padding:12px 8px;border-bottom:1px solid #edf2fb;font-size:.85rem}
+  .histo-ligne.entete{font-weight:700;color:var(--gris);font-size:.7rem;text-transform:uppercase}
+  .histo-ligne button{border:none;border-radius:8px;padding:6px 10px;font:600 .75rem 'Poppins';cursor:pointer;background:var(--bleu-clair);color:var(--bleu-fonce);margin-right:4px}
+  .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-bottom:16px}
+  .stat{background:linear-gradient(135deg,var(--bleu),#4a8bff);color:#fff;border-radius:16px;padding:16px}
+  .stat small{opacity:.85;font-size:.72rem}
+  .stat b{display:block;font-size:1.4rem;margin-top:2px}
+  @media(max-width:760px){.histo-ligne{grid-template-columns:1fr 1fr;}.histo-ligne.entete{display:none}}
+
+  .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--bleu-fonce);color:#fff;padding:12px 22px;border-radius:999px;font-weight:600;font-size:.85rem;transition:.3s;z-index:50;opacity:0}
+  .toast.on{transform:translateX(-50%) translateY(0);opacity:1}
+
+  /* impression : seule la facture est imprimée */
+  @media print{
+    @page{size:A4;margin:8mm}
+    body{background:#fff}
+    .bulles,header.top,.formulaire,#vue-histo,.toast{display:none!important}
+    main{display:block;margin:0;padding:0;max-width:none}
+    .zone-facture{position:static}
+    .facture{box-shadow:none;border:none;border-radius:0}
+    *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  }
+</style>
+</head>
+<body>
+<div class="bulles" id="bulles"></div>
+
+<header class="top">
+  <img src="logo.jpg" alt="Logo Pressing by Machina">
+  <div>
+    <h1>Pressing by Machina</h1>
+    <p>Espace facturation automatique</p>
+  </div>
+  <div class="nav">
+    <button id="nav-nouvelle" class="actif">＋ Nouvelle facture</button>
+    <button id="nav-histo">📋 Historique</button>
+  </div>
+</header>
+
+<main id="vue-edition">
+  <!-- ===== FORMULAIRE ===== -->
+  <section class="formulaire">
+    <div class="carte">
+      <h2><span class="n">1</span> Client</h2>
+      <label>Nom du client</label>
+      <input id="client-nom" placeholder="Ex : Fatou Diop" autocomplete="off">
+      <div class="duo">
+        <div><label>Téléphone / WhatsApp</label><input id="client-tel" placeholder="77 000 00 00" inputmode="tel"></div>
+        <div><label>Date de dépôt</label><input id="date-depot" type="date"></div>
+      </div>
+      <div class="duo">
+        <div><label>Date de retrait</label><input id="date-retrait" type="date"></div>
+        <div><label>Mode de remise</label>
+          <select id="remise-mode"><option value="0">Retrait au pressing</option><option value="1">Livraison à domicile</option></select></div>
+      </div>
+      <label>Adresse de livraison (si livraison)</label>
+      <input id="client-adresse" placeholder="Quartier, rue…">
+    </div>
+
+    <div class="carte">
+      <h2><span class="n">2</span> Articles & services</h2>
+      <div class="catalogue" id="catalogue"></div>
+      <div id="lignes"></div>
+      <button class="lien" id="ajout-libre">＋ Ajouter une ligne libre</button>
+    </div>
+
+    <div class="carte">
+      <h2><span class="n">3</span> Paiement</h2>
+      <div class="duo">
+        <div><label>Remise (%)</label><input id="remise" type="number" min="0" max="100" value="0"></div>
+        <div><label>Frais de livraison (FCFA)</label><input id="livraison" type="number" min="0" value="0"></div>
+      </div>
+      <div class="duo">
+        <div><label>Acompte versé (FCFA)</label><input id="acompte" type="number" min="0" value="0"></div>
+        <div><label>Mode de paiement</label>
+          <select id="mode-paiement"><option>Espèces</option><option>Wave</option><option>Orange Money</option><option>Free Money</option><option>Virement</option></select></div>
+      </div>
+      <label>Note (facultatif)</label>
+      <input id="note" placeholder="Ex : Taches difficiles sur la chemise blanche">
+    </div>
+
+    <div class="actions">
+      <button class="btn prim plein" id="btn-enregistrer">💾 Enregistrer la facture</button>
+      <button class="btn sec" id="btn-imprimer">🖨️ Imprimer / PDF</button>
+      <button class="btn wa" id="btn-wa">💬 Envoyer WhatsApp</button>
+      <button class="btn sec plein" id="btn-nouveau">↺ Nouvelle facture vierge</button>
+    </div>
+  </section>
+
+  <!-- ===== APERÇU FACTURE ===== -->
+  <section class="zone-facture">
+    <div class="facture" id="facture">
+      <div class="f-haut">
+        <div class="f-marque">
+          <img src="logo.jpg" alt="">
+          <div><h3>Pressing by Machina</h3><p>FRESH · CLEAN · PRESSED</p></div>
+        </div>
+        <div class="f-titre"><h4>FACTURE</h4><span id="p-numero">N° —</span></div>
+      </div>
+      <div class="f-corps">
+        <div class="f-infos">
+          <div class="f-bloc">
+            <small>Facturé à</small>
+            <p><b id="p-client">Client</b><br><span id="p-tel"></span><br><span id="p-adresse"></span></p>
+          </div>
+          <div class="f-bloc">
+            <small>Détails</small>
+            <p>Dépôt : <b id="p-depot"></b><br>Retrait : <b id="p-retrait"></b><br>Remise : <b id="p-mode"></b></p>
+          </div>
+        </div>
+        <table>
+          <thead><tr><th>Désignation</th><th class="r">Qté</th><th class="r">P.U.</th><th class="r">Montant</th></tr></thead>
+          <tbody id="p-lignes"></tbody>
+        </table>
+        <div class="f-bas">
+          <div>
+            <span class="statut attente" id="p-statut">EN ATTENTE</span>
+            <p class="note" id="p-paiement"></p>
+            <p class="note" id="p-note"></p>
+          </div>
+          <div class="totaux">
+            <div><span>Sous-total</span><b id="t-sous">0 FCFA</b></div>
+            <div class="remise" id="t-remise-l" style="display:none"><span id="t-remise-lib">Remise</span><b id="t-remise"></b></div>
+            <div id="t-liv-l" style="display:none"><span>Livraison</span><b id="t-liv"></b></div>
+            <div class="total"><span>TOTAL</span><span id="t-total">0 FCFA</span></div>
+            <div id="t-acompte-l" style="display:none"><span>Acompte versé</span><b id="t-acompte"></b></div>
+            <div class="reste" id="t-reste-l" style="display:none"><span>Reste à payer</span><b id="t-reste"></b></div>
+          </div>
+        </div>
+      </div>
+      <div class="tampon">PAYÉE</div>
+      <div class="f-pied">
+        <div class="merci">Merci de votre confiance ! 💙</div>
+        <b>Votre propreté, ma priorité.</b><br>
+        📍 Dakar Patte d'Oie, près de l'Hôpital Nabi Choucair · WhatsApp : <b>78 14 20 005</b><br>
+        <small>Les vêtements non retirés sous 30 jours ne sont plus sous notre responsabilité.</small>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- ===== HISTORIQUE ===== -->
+<main id="vue-histo">
+  <div class="carte" style="grid-column:1/-1">
+    <h2>📋 Historique des factures</h2>
+    <div class="stats" id="stats"></div>
+    <div class="histo-ligne entete"><span>N°</span><span>Client</span><span>Date</span><span>Total</span><span>Actions</span></div>
+    <div id="histo-liste"></div>
+  </div>
+</main>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ===== Données de base : tarifs modifiables ici ===== */
+const CATALOGUE = [
+  {nom:'Chemise',      prix:500,  em:'👔'},
+  {nom:'Pantalon',     prix:600,  em:'👖'},
+  {nom:'T-shirt / Polo',prix:400, em:'👕'},
+  {nom:'Costume 2 pièces',prix:3000,em:'🤵'},
+  {nom:'Robe',         prix:1500, em:'👗'},
+  {nom:'Boubou',       prix:2000, em:'🥻'},
+  {nom:'Veste',        prix:1500, em:'🧥'},
+  {nom:'Drap',         prix:1500, em:'🛏️'},
+  {nom:'Couette',      prix:3500, em:'🛌'},
+  {nom:'Linge au kilo (blanchisserie)',prix:1000,em:'🧺'},
+  {nom:'Repassage seul',prix:300, em:'♨️'},
+  {nom:'Nettoyage à domicile',prix:5000,em:'🏠'}
+];
+
+const CLE_HISTO = 'machina_factures';
+const CLE_COMPTEUR = 'machina_compteur';
+let lignes = [];
+let numeroCourant = null;
+
+const $ = id => document.getElementById(id);
+const fcfa = n => Math.round(n).toLocaleString('fr-FR').replace(/ | /g,' ') + ' FCFA';
+const aujourdhui = () => new Date().toISOString().slice(0,10);
+const dateFr = d => d ? new Date(d+'T00:00:00').toLocaleDateString('fr-FR',{day:'2-digit',month:'long',year:'numeric'}) : '—';
+const echap = s => String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+function lire(cle,def){ try{ return JSON.parse(localStorage.getItem(cle)) ?? def; }catch(e){ return def; } }
+function ecrire(cle,val){ try{ localStorage.setItem(cle,JSON.stringify(val)); }catch(e){} }
+
+/* Numéro automatique : FAC-AAAA-0001 */
+function prochainNumero(reserver){
+  const an = new Date().getFullYear();
+  const c = lire(CLE_COMPTEUR,{an,n:0});
+  const n = (c.an===an ? c.n : 0) + 1;
+  if(reserver) ecrire(CLE_COMPTEUR,{an,n});
+  return `FAC-${an}-${String(n).padStart(4,'0')}`;
+}
+
+/* ===== Catalogue ===== */
+$('catalogue').innerHTML = CATALOGUE.map((s,i)=>
+  `<button class="svc" data-i="${i}"><span class="em">${s.em}</span><b>${echap(s.nom)}</b><small>${s.prix.toLocaleString('fr-FR')} F</small></button>`).join('');
+$('catalogue').addEventListener('click',e=>{
+  const b = e.target.closest('.svc'); if(!b) return;
+  const s = CATALOGUE[b.dataset.i];
+  const ex = lignes.find(l=>l.nom===s.nom && l.prix===s.prix);
+  if(ex) ex.qte++; else lignes.push({nom:s.nom,qte:1,prix:s.prix});
+  rendreLignes(); maj();
+});
+$('ajout-libre').onclick = ()=>{ lignes.push({nom:'',qte:1,prix:0}); rendreLignes(); maj(); };
+
+function rendreLignes(){
+  const zone = $('lignes');
+  if(!lignes.length){ zone.innerHTML = '<div class="vide">Touchez un article ci-dessus pour l\'ajouter 👆</div>'; return; }
+  zone.innerHTML = lignes.map((l,i)=>`
+    <div class="ligne">
+      <input data-i="${i}" data-k="nom" value="${echap(l.nom)}" placeholder="Désignation">
+      <input data-i="${i}" data-k="qte" type="number" min="1" value="${l.qte}">
+      <input data-i="${i}" data-k="prix" type="number" min="0" value="${l.prix}">
+      <button class="x" data-del="${i}" title="Supprimer">✕</button>
+    </div>`).join('');
+}
+$('lignes').addEventListener('input',e=>{
+  const i = e.target.dataset.i, k = e.target.dataset.k; if(i===undefined) return;
+  lignes[i][k] = k==='nom' ? e.target.value : Math.max(0,Number(e.target.value)||0);
+  maj();
+});
+$('lignes').addEventListener('click',e=>{
+  if(e.target.dataset.del===undefined) return;
+  lignes.splice(e.target.dataset.del,1); rendreLignes(); maj();
+});
+
+/* ===== Calculs + aperçu en direct ===== */
+function calculs(){
+  const sous = lignes.reduce((s,l)=>s+l.qte*l.prix,0);
+  const pct = Math.min(100,Math.max(0,Number($('remise').value)||0));
+  const remise = sous*pct/100;
+  const liv = $('remise-mode').value==='1' ? (Number($('livraison').value)||0) : 0;
+  const total = sous-remise+liv;
+  const acompte = Math.min(total,Math.max(0,Number($('acompte').value)||0));
+  return {sous,pct,remise,liv,total,acompte,reste:total-acompte};
+}
+
+function maj(){
+  const c = calculs();
+  $('p-numero').textContent = 'N° '+numeroCourant;
+  $('p-client').textContent = $('client-nom').value.trim() || 'Client';
+  $('p-tel').textContent = $('client-tel').value ? '📞 '+$('client-tel').value : '';
+  const livraison = $('remise-mode').value==='1';
+  $('p-adresse').textContent = livraison && $('client-adresse').value ? '📍 '+$('client-adresse').value : '';
+  $('p-depot').textContent = dateFr($('date-depot').value);
+  $('p-retrait').textContent = dateFr($('date-retrait').value);
+  $('p-mode').textContent = livraison ? 'Livraison à domicile' : 'Retrait au pressing';
+  $('p-lignes').innerHTML = lignes.length ? lignes.map(l=>`
+    <tr><td>${echap(l.nom)||'—'}</td><td class="r">${l.qte}</td><td class="r">${fcfa(l.prix)}</td><td class="r"><b>${fcfa(l.qte*l.prix)}</b></td></tr>`).join('')
+    : '<tr class="vide-f"><td colspan="4">Aucun article pour le moment</td></tr>';
+  $('t-sous').textContent = fcfa(c.sous);
+  $('t-remise-l').style.display = c.remise>0 ? 'flex':'none';
+  $('t-remise-lib').textContent = `Remise (${c.pct}%)`;
+  $('t-remise').textContent = '− '+fcfa(c.remise);
+  $('t-liv-l').style.display = c.liv>0 ? 'flex':'none';
+  $('t-liv').textContent = fcfa(c.liv);
+  $('t-total').textContent = fcfa(c.total);
+  $('t-acompte-l').style.display = c.acompte>0 ? 'flex':'none';
+  $('t-acompte').textContent = fcfa(c.acompte);
+  const payee = c.total>0 && c.reste===0;
+  $('t-reste-l').style.display = c.reste>0 ? 'flex':'none';
+  $('t-reste').textContent = fcfa(c.reste);
+  const st = $('p-statut');
+  st.className = 'statut '+(payee?'payee':c.acompte>0?'partiel':'attente');
+  st.textContent = payee?'PAYÉE':c.acompte>0?'ACOMPTE REÇU':'EN ATTENTE DE PAIEMENT';
+  $('facture').classList.toggle('payee',payee);
+  $('p-paiement').textContent = c.acompte>0 ? 'Règlement par '+$('mode-paiement').value+'.' : '';
+  $('p-note').textContent = $('note').value ? '📝 '+$('note').value : '';
+}
+['client-nom','client-tel','client-adresse','date-depot','date-retrait','remise-mode','remise','livraison','acompte','mode-paiement','note']
+  .forEach(id=>$(id).addEventListener('input',maj));
+
+/* ===== Nouvelle facture ===== */
+function nouvelle(){
+  lignes = [];
+  ['client-nom','client-tel','client-adresse','note'].forEach(id=>$(id).value='');
+  $('remise').value=0; $('livraison').value=0; $('acompte').value=0;
+  $('remise-mode').value='0'; $('mode-paiement').selectedIndex=0;
+  $('date-depot').value = aujourdhui();
+  const d = new Date(); d.setDate(d.getDate()+2);
+  $('date-retrait').value = d.toISOString().slice(0,10);
+  numeroCourant = prochainNumero(false);
+  rendreLignes(); maj();
+}
+$('btn-nouveau').onclick = nouvelle;
+
+/* ===== Enregistrement / historique ===== */
+function instantane(){
+  const c = calculs();
+  return {
+    numero:numeroCourant, date:$('date-depot').value, retrait:$('date-retrait').value,
+    client:$('client-nom').value.trim(), tel:$('client-tel').value, adresse:$('client-adresse').value,
+    mode:$('remise-mode').value, remisePct:$('remise').value, livraison:$('livraison').value,
+    acompte:$('acompte').value, paiement:$('mode-paiement').value, note:$('note').value,
+    lignes:JSON.parse(JSON.stringify(lignes)), total:c.total, reste:c.reste
+  };
+}
+function enregistrer(silencieux){
+  if(!lignes.length){ toast('Ajoutez au moins un article'); return false; }
+  const histo = lire(CLE_HISTO,[]);
+  const f = instantane();
+  const idx = histo.findIndex(h=>h.numero===f.numero);
+  if(idx>=0) histo[idx]=f;
+  else { histo.unshift(f); ecrire(CLE_COMPTEUR,{an:new Date().getFullYear(),n:Number(f.numero.split('-')[2])}); }
+  ecrire(CLE_HISTO,histo);
+  if(!silencieux) toast('✅ Facture '+f.numero+' enregistrée');
+  return true;
+}
+$('btn-enregistrer').onclick = ()=>{ if(enregistrer()){ /* on garde la facture affichée pour impression/envoi */ } };
+
+$('btn-imprimer').onclick = ()=>{ if(enregistrer(true)) window.print(); };
+
+/* ===== WhatsApp ===== */
+$('btn-wa').onclick = ()=>{
+  if(!enregistrer(true)) return;
+  const c = calculs();
+  let tel = $('client-tel').value.replace(/\D/g,'');
+  if(tel.length===9) tel = '221'+tel;
+  const detail = lignes.map(l=>`• ${l.nom} x${l.qte} = ${fcfa(l.qte*l.prix)}`).join('\n');
+  const msg = `🧺 *Pressing by Machina*\nFacture *${numeroCourant}*\nClient : ${$('client-nom').value||'—'}\n\n${detail}\n\n*TOTAL : ${fcfa(c.total)}*`
+    + (c.acompte>0?`\nAcompte : ${fcfa(c.acompte)}\nReste à payer : ${fcfa(c.reste)}`:'')
+    + `\nRetrait prévu : ${dateFr($('date-retrait').value)}\n\nMerci de votre confiance 💙\nVotre propreté, ma priorité.`;
+  window.open('https://wa.me/'+tel+'?text='+encodeURIComponent(msg),'_blank');
+};
+
+/* ===== Vues ===== */
+function afficher(vue){
+  $('vue-edition').style.display = vue==='edition' ? 'grid':'none';
+  $('vue-histo').style.display = vue==='histo' ? 'block':'none';
+  $('nav-nouvelle').classList.toggle('actif',vue==='edition');
+  $('nav-histo').classList.toggle('actif',vue==='histo');
+  if(vue==='histo') rendreHisto();
+}
+$('nav-nouvelle').onclick = ()=>afficher('edition');
+$('nav-histo').onclick = ()=>afficher('histo');
+
+function rendreHisto(){
+  const histo = lire(CLE_HISTO,[]);
+  const ca = histo.reduce((s,h)=>s+h.total,0);
+  const impaye = histo.reduce((s,h)=>s+h.reste,0);
+  $('stats').innerHTML = `
+    <div class="stat"><small>Factures émises</small><b>${histo.length}</b></div>
+    <div class="stat"><small>Chiffre d'affaires</small><b>${fcfa(ca)}</b></div>
+    <div class="stat" style="background:linear-gradient(135deg,#dc2626,#f97316)"><small>Reste à encaisser</small><b>${fcfa(impaye)}</b></div>`;
+  $('histo-liste').innerHTML = histo.length ? histo.map(h=>`
+    <div class="histo-ligne">
+      <b>${echap(h.numero)}</b><span>${echap(h.client)||'—'}</span><span>${dateFr(h.date)}</span>
+      <b>${fcfa(h.total)}</b>
+      <span><button data-ouvrir="${echap(h.numero)}">Ouvrir</button><button data-suppr="${echap(h.numero)}">🗑</button></span>
+    </div>`).join('')
+    : '<div class="vide">Aucune facture enregistrée pour le moment.</div>';
+}
+$('histo-liste').addEventListener('click',e=>{
+  const o = e.target.dataset.ouvrir, s = e.target.dataset.suppr;
+  const histo = lire(CLE_HISTO,[]);
+  if(o){
+    const h = histo.find(x=>x.numero===o); if(!h) return;
+    numeroCourant = h.numero; lignes = h.lignes;
+    $('client-nom').value=h.client; $('client-tel').value=h.tel; $('client-adresse').value=h.adresse;
+    $('date-depot').value=h.date; $('date-retrait').value=h.retrait; $('remise-mode').value=h.mode;
+    $('remise').value=h.remisePct; $('livraison').value=h.livraison; $('acompte').value=h.acompte;
+    $('mode-paiement').value=h.paiement; $('note').value=h.note;
+    rendreLignes(); maj(); afficher('edition');
+  }
+  if(s && confirm('Supprimer la facture '+s+' ?')){
+    ecrire(CLE_HISTO,histo.filter(x=>x.numero!==s)); rendreHisto();
+  }
+});
+
+/* ===== Divers ===== */
+let tt; function toast(t){ const el=$('toast'); el.textContent=t; el.classList.add('on'); clearTimeout(tt); tt=setTimeout(()=>el.classList.remove('on'),2200); }
+for(let i=0;i<16;i++){
+  const b=document.createElement('i'), s=20+Math.random()*70;
+  b.style.cssText=`width:${s}px;height:${s}px;left:${Math.random()*100}%;animation-duration:${14+Math.random()*18}s;animation-delay:-${Math.random()*20}s`;
+  $('bulles').appendChild(b);
+}
+nouvelle();
+</script>
+</body>
+</html>
