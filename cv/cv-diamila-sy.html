@@ -3,89 +3,152 @@
 <style>
 @page{size:A4;margin:0}
 *{box-sizing:border-box;margin:0;padding:0}
-body{width:210mm;height:297mm;font-family:'Helvetica Neue',Arial,sans-serif;font-size:9.2pt;color:#2b2b2b;display:flex;line-height:1.38}
-aside{width:70mm;background:#14423f;color:#eaf3f1;padding:14mm 8mm}
-main{flex:1;padding:14mm 11mm 10mm 11mm}
-.initials{width:24mm;height:24mm;border-radius:50%;background:#e0a458;color:#14423f;font-weight:700;font-size:22pt;display:flex;align-items:center;justify-content:center;margin-bottom:6mm;letter-spacing:1px}
-aside h2{font-size:8.5pt;letter-spacing:2px;text-transform:uppercase;color:#e0a458;border-bottom:1px solid rgba(224,164,88,.5);padding-bottom:1.5mm;margin:7mm 0 3mm}
-aside h2:first-of-type{margin-top:0}
-aside p,aside li{font-size:8.6pt;margin-bottom:1.6mm}
-aside ul{list-style:none}
-aside strong{color:#fff;display:block;font-size:8.6pt;margin-top:2.5mm}
-aside li.sk{padding-left:3mm;position:relative}
-aside li.sk:before{content:"";position:absolute;left:0;top:1.6mm;width:1.4mm;height:1.4mm;background:#e0a458;border-radius:50%}
-.lang{display:flex;justify-content:space-between;margin-bottom:1mm}
-.bar{height:1.4mm;background:rgba(255,255,255,.2);border-radius:1mm;margin-bottom:2.5mm}
-.bar i{display:block;height:100%;background:#e0a458;border-radius:1mm}
-h1{font-size:25pt;line-height:1.05;color:#14423f;font-weight:800;letter-spacing:-.5px}
-.role{color:#c97b2a;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;font-size:9pt;margin:2mm 0 5mm}
-main h2{font-size:10pt;letter-spacing:2px;text-transform:uppercase;color:#14423f;display:flex;align-items:center;gap:3mm;margin:5.5mm 0 3mm}
-main h2:after{content:"";flex:1;height:1px;background:#d8d2c6}
-.profile{font-size:9.2pt;color:#444}
-.job{margin-bottom:3.8mm}
-.job .head{display:flex;justify-content:space-between;align-items:baseline}
-.job b{font-size:10pt;color:#1b1b1b}
-.job .org{color:#c97b2a;font-weight:600}
-.date{font-size:8.2pt;color:#777;white-space:nowrap}
-.job ul{margin:1.2mm 0 0 4mm}
-.job li{margin-bottom:.5mm}
-.job li::marker{color:#e0a458}
-.row{display:flex;gap:3mm;margin-bottom:2mm}
-.row .d{width:24mm;flex-shrink:0;font-size:8.4pt;color:#777;padding-top:.3mm}
-.row div:last-child b{color:#1b1b1b}
-.row small{display:block;color:#666;font-size:8.4pt}
+:root{--ink:#1d2433;--soft:#5b6170;--line:#e4ddd0;--paper:#fbf8f3;--accent:#b4532a;--tint:#f3e9dc}
+body{width:210mm;height:297mm;font-family:Inter,'Helvetica Neue',Arial,sans-serif;font-size:8.9pt;line-height:1.42;color:var(--ink);background:var(--paper);position:relative;overflow:hidden}
+.serif{font-family:Caladea,Cambria,Georgia,serif}
+
+header{padding:15mm 15mm 8mm;display:flex;justify-content:space-between;align-items:flex-end;position:relative}
+header:before{content:"";position:absolute;left:0;top:0;width:100%;height:3mm;background:var(--accent)}
+h1{font-family:Caladea,Cambria,Georgia,serif;font-size:33pt;font-weight:700;line-height:1;letter-spacing:-.6px}
+h1 span{color:var(--accent)}
+.role{margin-top:3.2mm;font-size:8.6pt;letter-spacing:2.6px;text-transform:uppercase;color:var(--soft);font-weight:500}
+.contact{list-style:none;text-align:right;font-size:8.6pt}
+.contact li{display:flex;justify-content:flex-end;align-items:center;gap:2.2mm;margin-top:1.5mm}
+.contact svg{width:3.4mm;height:3.4mm;stroke:var(--accent);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+
+.profile{margin:0 15mm;padding:5mm 6mm;background:var(--tint);border-left:1mm solid var(--accent);font-family:Caladea,Cambria,Georgia,serif;font-size:10.2pt;line-height:1.5;color:#3a3f4c}
+
+.grid{display:grid;grid-template-columns:1fr 58mm;gap:9mm;padding:7mm 15mm 0}
+h2{font-size:8.2pt;letter-spacing:2.6px;text-transform:uppercase;font-weight:700;color:var(--accent);display:flex;align-items:center;gap:3mm;margin-bottom:3.6mm}
+h2:after{content:"";flex:1;height:1px;background:var(--line)}
+section{margin-bottom:6mm}
+
+.tl{border-left:1px solid var(--line);margin-left:1.2mm;padding-left:5.5mm}
+.item{position:relative;margin-bottom:4.2mm}
+.item:last-child{margin-bottom:0}
+.item:before{content:"";position:absolute;left:-6.8mm;top:1.3mm;width:2.4mm;height:2.4mm;border-radius:50%;background:var(--paper);border:.6mm solid var(--accent)}
+.top{display:flex;justify-content:space-between;align-items:baseline;gap:3mm}
+.title{font-family:Caladea,Cambria,Georgia,serif;font-size:11.4pt;font-weight:700}
+.date{font-size:7.8pt;color:var(--accent);font-weight:600;white-space:nowrap;letter-spacing:.3px}
+.org{color:var(--soft);font-size:8.8pt;font-weight:500;margin-bottom:1.3mm}
+.item ul{list-style:none}
+.item li{position:relative;padding-left:3.4mm;margin-bottom:.55mm;color:#353b48}
+.item li:before{content:"";position:absolute;left:0;top:1.75mm;width:1.5mm;height:1px;background:var(--accent)}
+.compact .item{margin-bottom:2.6mm}
+.compact .title{font-size:10.2pt}
+.compact .org{margin-bottom:0}
+
+aside h3{font-size:8.8pt;font-weight:700;margin:3mm 0 1.6mm}
+aside h3:first-of-type{margin-top:0}
+.chips{display:flex;flex-wrap:wrap;gap:1.3mm}
+.chips span{font-size:7.7pt;padding:.8mm 2.2mm;border:1px solid var(--line);border-radius:3mm;background:#fff;color:#353b48;white-space:nowrap}
+.lang{display:flex;justify-content:space-between;align-items:center;margin-bottom:2mm}
+.lang b{font-weight:600}
+.lang small{display:block;color:var(--soft);font-size:7.8pt}
+.dots{display:flex;gap:1mm}
+.dots i{width:2.2mm;height:2.2mm;border-radius:50%;background:var(--accent)}
+.dots i.o{background:var(--line)}
+.info{color:#353b48}
+.info div{margin-bottom:1.2mm}
+.info b{display:block;font-size:7.4pt;letter-spacing:1.2px;text-transform:uppercase;color:var(--soft);font-weight:600}
+footer{position:absolute;left:0;bottom:0;width:100%;height:3mm;background:var(--ink)}
 </style></head><body>
-<aside>
-  <div class="initials">DS</div>
-  <h2>Contact</h2>
-  <p>📍 Dakar, Patte d'Oie</p>
-  <p>📞 77 097 81 16</p>
-  <p>✉️ sydiamila99@gmail.com</p>
-  <h2>Infos</h2>
-  <p>Née le 05 janvier 1999<br>à Tivaouane</p>
-  <p>Nationalité sénégalaise</p>
-  <h2>Compétences</h2>
-  <strong>Caisse</strong>
-  <ul><li class="sk">Encaissement &amp; rendu de monnaie</li><li class="sk">Terminal de paiement</li><li class="sk">Paiement mobile (Wave, Orange Money)</li><li class="sk">Clôture de caisse</li></ul>
-  <strong>Restauration</strong>
-  <ul><li class="sk">Service en salle, prise de commande</li><li class="sk">Mise en place</li><li class="sk">Hygiène &amp; sécurité alimentaire</li></ul>
-  <strong>Relation client</strong>
-  <ul><li class="sk">Accueil &amp; écoute</li><li class="sk">Gestion des réclamations</li></ul>
-  <strong>Savoir-être</strong>
-  <ul><li class="sk">Travail en équipe</li><li class="sk">Gestion du stress</li><li class="sk">Rigueur &amp; ponctualité</li><li class="sk">Prise de décision</li></ul>
-  <strong>Informatique</strong>
-  <ul><li class="sk">Word · Excel · PowerPoint</li></ul>
-  <h2>Langues</h2>
-  <div class="lang"><span>Wolof</span><span>Langue maternelle</span></div><div class="bar"><i style="width:100%"></i></div>
-  <div class="lang"><span>Français</span><span>Courant</span></div><div class="bar"><i style="width:85%"></i></div>
-  <h2>Centres d'intérêt</h2>
-  <p>Sport · Lecture</p>
-</aside>
+
+<header>
+  <div>
+    <h1>Diamila Samba <span>SY</span></h1>
+    <div class="role">Caissière · Serveuse polyvalente · Accueil clientèle</div>
+  </div>
+  <ul class="contact">
+    <li>Dakar, Patte d'Oie <svg viewBox="0 0 24 24"><path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.800-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg></li>
+    <li>77 097 81 16 <svg viewBox="0 0 24 24"><path d="M5 4h4l2 5-2.500 1.500a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z"/></svg></li>
+    <li>sydiamila99@gmail.com <svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg></li>
+  </ul>
+</header>
+
+<p class="profile">Jeune femme dynamique et souriante, formée en tourisme et hôtellerie à l'ISEP de Thiès. Habituée au contact avec la clientèle, à la gestion des encaissements et au travail en équipe dans un environnement rapide. Rigoureuse, ponctuelle et attentive aux règles d'hygiène.</p>
+
+<div class="grid">
 <main>
-  <h1>Diamila<br>Samba SY</h1>
-  <div class="role">Caissière · Serveuse · Déclarante en douane</div>
-  <h2>Profil</h2>
-  <p class="profile">Jeune femme dynamique et souriante, formée en tourisme et hôtellerie à l'ISEP de Thiès. Habituée au contact avec la clientèle, à la gestion des encaissements et au travail en équipe dans un environnement rapide. Rigoureuse, ponctuelle et attentive aux règles d'hygiène.</p>
+  <section>
+    <h2>Expériences professionnelles</h2>
+    <div class="tl">
+      <div class="item">
+        <div class="top"><span class="title">Caissière (stage)</span><span class="date">JUIN – SEPT. 2022</span></div>
+        <div class="org">Auchan · Tivaouane</div>
+        <ul>
+          <li>Accueil des clients et enregistrement des achats en caisse</li>
+          <li>Encaissement en espèces, par carte et par paiement mobile (Wave, Orange Money)</li>
+          <li>Ouverture et clôture de caisse, comptage du fond de caisse et justification des écarts</li>
+          <li>Gestion des retours, échanges et réclamations clients</li>
+          <li>Mise en rayon et rangement de l'espace caisse</li>
+        </ul>
+      </div>
+      <div class="item">
+        <div class="top"><span class="title">Serveuse / Employée polyvalente</span><span class="date">JUIN – JUIL. 2021</span></div>
+        <div class="org">Seven Seven · Dakar</div>
+        <ul>
+          <li>Accueil et installation des clients, présentation du menu et prise de commandes</li>
+          <li>Service en salle et au comptoir, débarrassage et dressage des tables</li>
+          <li>Encaissement des additions et tenue de la caisse en fin de service</li>
+          <li>Aide en cuisine : préparation, mise en place et respect des normes d'hygiène (HACCP)</li>
+          <li>Nettoyage et entretien de la salle et du matériel</li>
+        </ul>
+      </div>
+    </div>
+  </section>
 
-  <h2>Expériences professionnelles</h2>
-  <div class="job">
-    <div class="head"><span><b>Caissière (stage)</b> · <span class="org">Auchan, Tivaouane</span></span><span class="date">Juin – Sept. 2022</span></div>
-    <ul><li>Accueil des clients et enregistrement des achats en caisse</li><li>Encaissement en espèces, par carte et par paiement mobile (Wave, Orange Money)</li><li>Ouverture et clôture de caisse, comptage du fond de caisse et justification des écarts</li><li>Gestion des retours, échanges et réclamations clients</li><li>Mise en rayon et rangement de l'espace caisse</li></ul>
-  </div>
-  <div class="job">
-    <div class="head"><span><b>Serveuse / Employée polyvalente</b> · <span class="org">Seven Seven, Dakar</span></span><span class="date">Juin – Juil. 2021</span></div>
-    <ul><li>Accueil et installation des clients, présentation du menu et prise de commandes</li><li>Service en salle et au comptoir, débarrassage et dressage des tables</li><li>Encaissement des additions et tenue de la caisse en fin de service</li><li>Aide en cuisine : préparation, mise en place, respect des normes d'hygiène (HACCP)</li><li>Nettoyage et entretien de la salle et du matériel</li></ul>
-  </div>
+  <section class="compact">
+    <h2>Stages</h2>
+    <div class="tl">
+      <div class="item"><div class="top"><span class="title">14V Guichet Unique</span><span class="date">DÉC. 2024</span></div><div class="org">Stage d'un mois</div></div>
+      <div class="item"><div class="top"><span class="title">Entreprise Holding Gueye</span><span class="date">OCT. 2024</span></div><div class="org">Stage de deux mois</div></div>
+      <div class="item"><div class="top"><span class="title">Africa Global Logistics (ex-Bolloré)</span><span class="date">JANV. 2024</span></div><div class="org">Expertise maritime</div></div>
+    </div>
+  </section>
 
-  <h2>Stages</h2>
-  <div class="row"><div class="d">Déc. 2024</div><div><b>14V Guichet Unique</b><small>Stage d'un mois</small></div></div>
-  <div class="row"><div class="d">Oct. 2024</div><div><b>Entreprise Holding Gueye</b><small>Stage de deux mois</small></div></div>
-  <div class="row"><div class="d">Janv. 2024</div><div><b>Africa Global Logistics (ex-Bolloré)</b><small>Expertise maritime</small></div></div>
-
-  <h2>Formation</h2>
-  <div class="row"><div class="d">2024 – 2026</div><div><b>Déclarant en douane</b><small>École auxiliaire des douanes, Dakar</small></div></div>
-  <div class="row"><div class="d">2022 – 2024</div><div><b>Licence en Transport Logistique</b><small>ESUP Dakar</small></div></div>
-  <div class="row"><div class="d">2020 – 2022</div><div><b>Formation en Tourisme et Hôtellerie</b><small>ISEP de Thiès</small></div></div>
-  <div class="row"><div class="d">2019 – 2020</div><div><b>Baccalauréat</b><small>École privée Abdou Aziz Sy, Tivaouane</small></div></div>
+  <section class="compact" style="margin-bottom:0">
+    <h2>Formation</h2>
+    <div class="tl">
+      <div class="item"><div class="top"><span class="title">Déclarant en douane</span><span class="date">2024 – 2026</span></div><div class="org">École auxiliaire des douanes · Dakar</div></div>
+      <div class="item"><div class="top"><span class="title">Licence en Transport Logistique</span><span class="date">2022 – 2024</span></div><div class="org">ESUP Dakar</div></div>
+      <div class="item"><div class="top"><span class="title">Formation en Tourisme et Hôtellerie</span><span class="date">2020 – 2022</span></div><div class="org">ISEP de Thiès</div></div>
+      <div class="item"><div class="top"><span class="title">Baccalauréat</span><span class="date">2019 – 2020</span></div><div class="org">École privée Abdou Aziz Sy · Tivaouane</div></div>
+    </div>
+  </section>
 </main>
+
+<aside>
+  <section>
+    <h2>Compétences</h2>
+    <h3>Caisse</h3>
+    <div class="chips"><span>Encaissement</span><span>Rendu de monnaie</span><span>Terminal de paiement</span><span>Paiement mobile</span><span>Clôture de caisse</span></div>
+    <h3>Restauration</h3>
+    <div class="chips"><span>Service en salle</span><span>Prise de commande</span><span>Mise en place</span><span>Hygiène et sécurité alimentaire</span></div>
+    <h3>Relation client</h3>
+    <div class="chips"><span>Accueil</span><span>Écoute</span><span>Gestion des réclamations</span></div>
+    <h3>Savoir-être</h3>
+    <div class="chips"><span>Travail en équipe</span><span>Gestion du stress</span><span>Rigueur</span><span>Ponctualité</span><span>Prise de décision</span></div>
+    <h3>Informatique</h3>
+    <div class="chips"><span>Word</span><span>Excel</span><span>PowerPoint</span></div>
+  </section>
+  <section>
+    <h2>Langues</h2>
+    <div class="lang"><div><b>Wolof</b><small>Langue maternelle</small></div><div class="dots"><i></i><i></i><i></i><i></i><i></i></div></div>
+    <div class="lang"><div><b>Français</b><small>Courant</small></div><div class="dots"><i></i><i></i><i></i><i></i><i class="o"></i></div></div>
+  </section>
+  <section>
+    <h2>Centres d'intérêt</h2>
+    <div class="chips"><span>Sport</span><span>Lecture</span></div>
+  </section>
+  <section style="margin-bottom:0">
+    <h2>État civil</h2>
+    <div class="info">
+      <div><b>Date de naissance</b>05 janvier 1999, à Tivaouane</div>
+      <div><b>Nationalité</b>Sénégalaise</div>
+    </div>
+  </section>
+</aside>
+</div>
+<footer></footer>
 </body></html>
